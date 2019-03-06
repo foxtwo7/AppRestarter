@@ -1,0 +1,15 @@
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\bin\Debug\RestartPlexWPF.exe.config
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\bin\Debug\RestartPlexWPF.exe
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\bin\Debug\RestartPlexWPF.pdb
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\RestartPlexWPF.csprojAssemblyReference.cache
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\MainWindow.g.cs
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\App.g.cs
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\RestartPlexWPF_MarkupCompile.cache
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\RestartPlexWPF_MarkupCompile.lref
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\MainWindow.baml
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\RestartPlexWPF.g.resources
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\RestartPlexWPF.Properties.Resources.resources
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\RestartPlexWPF.csproj.GenerateResource.cache
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\RestartPlexWPF.csproj.CoreCompileInputs.cache
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\RestartPlexWPF.exe
+c:\users\foxtwo\source\repos\RestartPlexWPF\RestartPlexWPF\obj\Debug\RestartPlexWPF.pdb
