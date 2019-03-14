@@ -19,8 +19,8 @@
         </Grid.ColumnDefinitions>
         <Button x:Name="GoButton" Content="Start Watch" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,163,0,0" Click="GoButton_Click"/>
         <Button x:Name="StopButton" Content="Stop Watch" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="102,163,0,0" Click="StopButton_Click"/>
-        <Label Content="App File Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" Width="215"/>
-        <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="215" Margin="10,31,0,0"/>
+        <Label Content="Filter App Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" Width="215"/>
+        <TextBox x:Name="FilterBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="215" Margin="10,31,0,0" KeyUp="FilterBox_KeyUp"/>
         <ListView x:Name="CurrentProcessesLB" HorizontalAlignment="Left" Height="545" VerticalAlignment="Top" Width="689" Margin="257,31,0,0" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
@@ -28,6 +28,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,199,0,0"/>
 
     </Grid>
 </Window>

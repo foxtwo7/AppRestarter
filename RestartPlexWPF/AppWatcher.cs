@@ -10,20 +10,25 @@ namespace RestartPlexWPF
 {
     public class AppWatcher
     {
-        public async void AppWatch(StatusCheck statusCheck, string appName)
+        public async void AppWatch(StatusCheck statusCheck)
         {
-            var result = await Task.Run(() => Execute(statusCheck, appName));
+            var result = await Task.Run(() => Execute(statusCheck));
         }
 
-        private int Execute(StatusCheck statusCheck, string appName)
+        private int Execute(StatusCheck statusCheck)
         {
-            while (statusCheck.KeepThreadRunning)
+            while (statusCheck.KeepAllAppsRunning)
             {
-                statusCheck.AppProcess = CheckAppStatus(appName);
-                if (statusCheck.AppProcess == null)
+                var appsToWatch = statusCheck.AppInfo.Where(x => x.KeepRunning);
+                foreach (var app in appsToWatch)
                 {
-                    Process.Start(statusCheck.AppPath);
+                    app.AppProcess = CheckAppStatus(app.AppName);
+                    if (app.AppProcess == null)
+                    {
+                        Process.Start(app.AppPath);
+                    }
                 }
+                
                 Thread.Sleep(statusCheck.ThreadSleepTime);
             }
             return 0;
