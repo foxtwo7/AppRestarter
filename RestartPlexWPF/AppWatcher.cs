@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
+using System.IO;
 
-namespace RestartPlexWPF
+namespace AppRestarter
 {
     public class AppWatcher
     {
@@ -26,19 +27,31 @@ namespace RestartPlexWPF
                     if (app.AppProcess == null)
                     {
                         Process.Start(app.AppPath);
+                        Log(app.AppName + " Failed and was restarted.");
+                        continue;
                     }
+
+                    Log(app.AppName);
                 }
-                
+
                 Thread.Sleep(statusCheck.ThreadSleepTime);
             }
             return 0;
         }
 
+        private static void Log(string logInfo)
+        {
+            using (StreamWriter writer = new StreamWriter(@"C:\temp\AppWatcherLog.txt"))
+            {
+                writer.WriteLine($"Watching App: {logInfo}");
+            }
+        }
+
         private static Process CheckAppStatus(string appName)
         {
             var currentProcesses = Process.GetProcesses();
-            var plexMediaServer = currentProcesses.FirstOrDefault(x => x.ProcessName.StartsWith(appName, StringComparison.OrdinalIgnoreCase));
-            return plexMediaServer;
+            var appProcess = currentProcesses.FirstOrDefault(x => x.ProcessName.StartsWith(appName, StringComparison.OrdinalIgnoreCase));
+            return appProcess;
         }
     }
 }

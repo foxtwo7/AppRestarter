@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestartPlexWPF", "RestartPlexWPF\RestartPlexWPF.csproj", "{3B4FFD6F-655B-455E-A9DD-8066B0D92428}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppRestarter", "RestartPlexWPF\AppRestarter.csproj", "{3B4FFD6F-655B-455E-A9DD-8066B0D92428}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

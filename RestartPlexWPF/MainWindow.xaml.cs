@@ -14,28 +14,35 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 
-namespace RestartPlexWPF
+namespace AppRestarter
 {
     public partial class MainWindow : Window
     {
         AppWatcher MainAppWatcher = new AppWatcher();
-        string AppPath = CurrentAppPath.CurrentAppFilePath();
         List<CheckBox> ListBoxCheckboxes = new List<CheckBox>();
+        Process[] currentProcesses = Process.GetProcesses();
+        StatusCheck statusCheck = new StatusCheck
+        {
+            KeepAllAppsRunning = true,
+            ThreadSleepTime = 5000
+        };
 
         public MainWindow()
         {
             InitializeComponent();
-            var currentProcesses = Process.GetProcesses();
+            FillOutListBoxWithCheckboxes();
+        }
 
+        private void FillOutListBoxWithCheckboxes()
+        {
             foreach (var process in currentProcesses.OrderBy(x => x.ProcessName))
             {
                 var tempCheckbox = new CheckBox();
                 tempCheckbox.Name = $"ProcessID{process.Id.ToString()}";
                 tempCheckbox.Content = process.ProcessName;
                 tempCheckbox.ToolTip = process.Id.ToString();
-                //tempCheckbox.Content = process;
                 ListBoxCheckboxes.Add(tempCheckbox);
-                
+
             }
             CurrentProcessesLB.ItemsSource = ListBoxCheckboxes;
         }
@@ -44,6 +51,7 @@ namespace RestartPlexWPF
         {
             var processIDs = new List<int>();
             var checkedBoxesNames = CurrentProcessesLB.Items.OfType<CheckBox>().Where(x => x.IsChecked == true).ToList();
+            statusCheck.AppInfo.Clear();
 
             foreach (var cb in checkedBoxesNames)
             {
@@ -52,25 +60,14 @@ namespace RestartPlexWPF
                 processIDs.Add(processID);
             }
 
-            Console.WriteLine(processIDs.Count());
             var checkedProcesses = Process.GetProcesses().Where(x => processIDs.Contains(x.Id));
 
-            StatusCheck statusCheck = new StatusCheck
-            {
-                KeepAllAppsRunning = true,
-                ThreadSleepTime = 5000
-            };
             checkedProcesses.ToList().ForEach(x => statusCheck.AppInfo.Add(new AppInfo { AppId = x.Id, AppName = x.ProcessName, AppPath = x.MainModule.FileName, AppProcess = x, KeepRunning = true }));
             StartStopProcess(statusCheck);
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            StatusCheck statusCheck = new StatusCheck
-            {
-                KeepAllAppsRunning = false,
-                ThreadSleepTime = 5000
-            };
             StartStopProcess(statusCheck);
         }
 
@@ -91,10 +88,14 @@ namespace RestartPlexWPF
             }
             else if (FilterBox.Text.Count() >= 2)
             {
-                var a = ListBoxCheckboxes.Where(x => x.Content.ToString().ToUpperInvariant().Contains(FilterBox.Text.ToUpperInvariant()));
                 CurrentProcessesLB.ItemsSource = ListBoxCheckboxes.Where(x => x.Content.ToString().ToUpperInvariant().Contains(FilterBox.Text.ToUpperInvariant()));
             }
-            
+        }
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            currentProcesses = Process.GetProcesses();
+            FillOutListBoxWithCheckboxes();
         }
     }
 }
