@@ -1,6 +1,8 @@
 obj/
 .vs/
 bin/
+RestartPlexWPF/bin/
+RestartPlexWPF/obj/
 RestartPlexWPF/obj/Debug/TempPE/Properties.Resources.Designer.cs.dll
 RestartPlexWPF/obj/Debug/RestartPlexWPF_MarkupCompile.lref
 RestartPlexWPF/obj/Debug/RestartPlexWPF_MarkupCompile.cache
