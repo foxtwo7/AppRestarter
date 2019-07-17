@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("AppRestarter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Jason Snell Enterprises")]
 [assembly: AssemblyProduct("AppRestarter")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]

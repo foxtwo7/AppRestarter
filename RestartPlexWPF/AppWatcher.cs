@@ -11,35 +11,37 @@ namespace AppRestarter
 {
     public class AppWatcher
     {
-        public async void AppWatch(StatusCheck statusCheck)
+        public async Task<int> AppWatch(StatusCheck statusCheck)
         {
-            var result = await Task.Run(() => Execute(statusCheck));
+            var result = await Execute(statusCheck);
+            return result;
         }
 
-        private int Execute(StatusCheck statusCheck)
+        private async Task<int> Execute(StatusCheck statusCheck)
         {
             while (statusCheck.KeepAllAppsRunning)
             {
                 var appsToWatch = statusCheck.AppInfo.Where(x => x.KeepRunning);
                 foreach (var app in appsToWatch)
                 {
-                    app.AppProcess = CheckAppStatus(app.AppName);
+                    app.AppProcess = await CheckAppStatus(app.AppId);
                     if (app.AppProcess == null)
                     {
-                        Process.Start(app.AppPath);
-                        Log(app.AppName + " Failed and was restarted.");
+                        var newProcess = Process.Start(app.AppPath);
+                        app.AppId = newProcess.Id;
+                        await Log(app.AppName + " Failed and was restarted.");
                         continue;
                     }
 
-                    Log(app.AppName);
+                    await Log(app.AppName);
                 }
 
-                Thread.Sleep(statusCheck.ThreadSleepTime);
+                await Task.Delay(statusCheck.ThreadSleepTime);
             }
             return 0;
         }
 
-        private static void Log(string logInfo)
+        private async Task Log(string logInfo)
         {
             using (StreamWriter writer = new StreamWriter(@"C:\temp\AppWatcherLog.txt"))
             {
@@ -47,10 +49,10 @@ namespace AppRestarter
             }
         }
 
-        private static Process CheckAppStatus(string appName)
+        private async Task<Process> CheckAppStatus(int appId)
         {
             var currentProcesses = Process.GetProcesses();
-            var appProcess = currentProcesses.FirstOrDefault(x => x.ProcessName.StartsWith(appName, StringComparison.OrdinalIgnoreCase));
+            var appProcess = currentProcesses.FirstOrDefault(x => x.Id.Equals(appId));
             return appProcess;
         }
     }

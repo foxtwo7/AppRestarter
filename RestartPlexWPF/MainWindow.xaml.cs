@@ -18,6 +18,7 @@ namespace AppRestarter
 {
     public partial class MainWindow : Window
     {
+        private const string title = "App Watcher";
         AppWatcher MainAppWatcher = new AppWatcher();
         List<CheckBox> ListBoxCheckboxes = new List<CheckBox>();
         Process[] currentProcesses = Process.GetProcesses();
@@ -30,17 +31,22 @@ namespace AppRestarter
         public MainWindow()
         {
             InitializeComponent();
+            Title = title;
             FillOutListBoxWithCheckboxes();
         }
 
         private void FillOutListBoxWithCheckboxes()
         {
+            ListBoxCheckboxes.Clear();
+
             foreach (var process in currentProcesses.OrderBy(x => x.ProcessName))
-            {
-                var tempCheckbox = new CheckBox();
-                tempCheckbox.Name = $"ProcessID{process.Id.ToString()}";
-                tempCheckbox.Content = process.ProcessName;
-                tempCheckbox.ToolTip = process.Id.ToString();
+            {                
+                var tempCheckbox = new CheckBox
+                {
+                    Name = $"ProcessID{process.Id.ToString()}",
+                    Content = process.ProcessName,
+                    ToolTip = process.Id.ToString()
+                };
                 ListBoxCheckboxes.Add(tempCheckbox);
 
             }
@@ -51,36 +57,63 @@ namespace AppRestarter
         {
             var processIDs = new List<int>();
             var checkedBoxesNames = CurrentProcessesLB.Items.OfType<CheckBox>().Where(x => x.IsChecked == true).ToList();
-            statusCheck.AppInfo.Clear();
-
+            //statusCheck.AppInfo.Clear();
+            var tempString = "";
             foreach (var cb in checkedBoxesNames)
             {
                 var processIDName = cb.Name.ToString().Substring(9);
                 int processID = Convert.ToInt32(processIDName);
                 processIDs.Add(processID);
+                
             }
 
             var checkedProcesses = Process.GetProcesses().Where(x => processIDs.Contains(x.Id));
+            foreach (var process in checkedProcesses)
+            {
+                var tempAppInfo = new AppInfo
+                {
+                    AppProcess = process,
+                    AppId = process.Id,
+                    AppName = process.ProcessName,
+                    AppPath = process.MainModule.FileName,
+                    KeepRunning = true
+                };
 
-            checkedProcesses.ToList().ForEach(x => statusCheck.AppInfo.Add(new AppInfo { AppId = x.Id, AppName = x.ProcessName, AppPath = x.MainModule.FileName, AppProcess = x, KeepRunning = true }));
+                if (!statusCheck.AppInfo.Contains(tempAppInfo))
+                {
+                    statusCheck.AppInfo.Add(tempAppInfo);
+                    tempString += $"{tempAppInfo.AppName} - ID: {tempAppInfo.AppId} {Environment.NewLine}";
+                }
+            }
+            //checkedProcesses.ToList().ForEach(x => statusCheck.AppInfo.Add(new AppInfo { AppId = x.Id,AppName = x.ProcessName, AppPath = x.MainModule.FileName, AppProcess = x, KeepRunning = true }));
             StartStopProcess(statusCheck);
+            AppWatcherWindow.Title = title + "Watching Applications";
+            WatchingLabel.Content = tempString;
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
+            statusCheck.AppInfo.Clear();
             StartStopProcess(statusCheck);
+            AppWatcherWindow.Title = title;
+            WatchingLabel.Content = null;
         }
 
-        public void StartStopProcess(StatusCheck statusCheck)
+        public async void StartStopProcess(StatusCheck statusCheck)
         {
-            MainAppWatcher.AppWatch(statusCheck);
+            await MainAppWatcher.AppWatch(statusCheck);
         }
 
         private void FilterBox_KeyUp(object sender, KeyEventArgs e)
         {
+            BoxFilter();
+        }
+
+        private void BoxFilter()
+        {
             if (string.IsNullOrWhiteSpace(FilterBox.Text))
             {
-                CurrentProcessesLB.ItemsSource = ListBoxCheckboxes;
+                CurrentProcessesLB.ItemsSource = ListBoxCheckboxes;                
             }
             else if (FilterBox.Text.Count() > 1 && FilterBox.Text.Count() < 2)
             {
@@ -96,6 +129,7 @@ namespace AppRestarter
         {
             currentProcesses = Process.GetProcesses();
             FillOutListBoxWithCheckboxes();
+            BoxFilter();
         }
     }
 }
